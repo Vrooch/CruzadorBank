@@ -1,4 +1,42 @@
-.vs/
+# Repository
+CruzadorBankGit/Repository/
+
+# Build
 bin/
 obj/
-CruzadorBankGit/Repository/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.rsuser
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Test results
+TestResults/
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+#Diagramas:
+*.cd
