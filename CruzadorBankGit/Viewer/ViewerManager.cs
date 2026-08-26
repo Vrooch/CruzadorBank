@@ -1,5 +1,6 @@
 ﻿using CruzadorBankGit.Entity;
 using CruzadorBankGit.Service;
+using CruzadorBankGit.Viewer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,9 +60,30 @@ namespace CruzadorBankGit.Viewer
         }
         internal void CreateAccount()
         {
+            string name;
+            decimal initialBalance = 0;
+
             _consoleUI.Head("CREATE NEW ACCOUNT");
-            string name = _consoleUI.GetString("Enter the client name: ");
-            decimal initialBalance = _consoleUI.GetDecimal("Enter the initial account balance: ");
+            name = _consoleUI.GetString("Enter the client name: ");
+            try
+            {
+                initialBalance = _consoleUI.GetDecimal("Enter the initial account balance: ");
+            }
+            catch (FormatException ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
+            catch(OverflowException ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
+            catch(Exception ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
  
             _accountService.CreateAccount(name, initialBalance);
 
@@ -70,9 +92,30 @@ namespace CruzadorBankGit.Viewer
         internal void AccessAccount()
         {
 
+            string name;
+            int accountId = 0;
+
             _consoleUI.Head("ACCESS ACCOUNT");
-            string name = _consoleUI.GetString("Enter the client name: ");
-            int accountId = _consoleUI.GetInt("Enter the account Id: ");
+            name = _consoleUI.GetString("Enter the client name: ");
+            try
+            {
+                accountId = _consoleUI.GetInt("Enter the account Id: ");
+            }
+            catch (FormatException ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
+            catch(OverflowException ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
+            catch(Exception ex)
+            {
+                _consoleUI.SpecialMessage(ex.Message);
+                return;
+            }
 
             ShowAccountData(name, accountId);
 
