@@ -64,6 +64,8 @@ namespace CruzadorBankGit.Viewer
             {
                 string name;
                 decimal initialBalance = 0;
+                string password;
+                string passwordConfrimation;
 
                 _consoleUI.Head("CREATE NEW ACCOUNT");
                 name = _consoleUI.GetString("Enter the client name: ");
@@ -87,9 +89,12 @@ namespace CruzadorBankGit.Viewer
                     continue;
                 }
 
-                _accountService.CreateAccount(name, initialBalance);
+                password = _consoleUI.GetString("Enter the password: ");
+                passwordConfrimation = _consoleUI.GetString("Confirme the password: ");
 
-                _consoleUI.SpecialMessage("Account creation Successfully complited", ConsoleColor.Green);
+                int accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
+
+                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green);
                 break;
             }
         }

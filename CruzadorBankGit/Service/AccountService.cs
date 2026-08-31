@@ -20,11 +20,11 @@ namespace CruzadorBankGit.Service
         {
             _accountRepository = new AccountRepository();
         }
-        public void CreateAccount(string name, decimal balance, string password)
+        public int CreateAccount(string name, decimal balance, string password, string passwordConfirmation)
         {
             if(balance < 0) throw new ArgumentOutOfRangeException(nameof(balance), "Balance should be equals ou bigger than 0");
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name), "Name should be a valid, not null, empty or white Space message");
-
+            if(password != passwordConfirmation) throw new ArgumentNullException(nameof(passwordConfirmation), "Both password should be equals");
             PasswordContentVerifier(password);
 
             byte[] salt = RandomNumberGenerator.GetBytes(16);
@@ -39,6 +39,8 @@ namespace CruzadorBankGit.Service
             _accountRepository.SetNewId(newId);
 
             _accountRepository.SaveNewAccount(account);
+
+            return account.AccountId;
         }
         public Account GetAccount(string name,  int accountId)
         {
