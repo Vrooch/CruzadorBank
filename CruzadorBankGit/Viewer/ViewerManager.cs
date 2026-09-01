@@ -10,7 +10,7 @@ namespace CruzadorBankGit.Viewer
 {
     internal class ViewerManager
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
         private readonly ConsoleUI _consoleUI;
         public ViewerManager()
         {
@@ -98,7 +98,7 @@ namespace CruzadorBankGit.Viewer
                 break;
             }
         }
-        internal void AccessAccount()
+        internal void Login()
         {
             while (true)
             {
@@ -127,18 +127,16 @@ namespace CruzadorBankGit.Viewer
 
                 string password = _consoleUI.GetString("Enter the password: ");
 
-                ShowAccountData(accountId, password);
+                IAccountSessionService accountSessionService = _accountService.Login(accountId, password);
                 break;
             }
 
-        }
-        internal void ShowAccountData(int accountId, string password)
-        {
-            Console.Clear();
-            ArrayList data = _accountService.GetAccountData(accountId, password);
+            using ()
+            {
 
-            _consoleUI.Head("ACCOUNT DATA");
-            _consoleUI.ShowAccountData(data);
+            }
+
         }
+
     }
 }
