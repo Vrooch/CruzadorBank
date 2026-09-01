@@ -33,11 +33,15 @@ namespace CruzadorBankGit.Entity
                 _balance = value;
             }
         }
-        public Account(int accountId, string name, decimal balance)
+        public byte[] Password { get; internal set; }
+        public byte[] Salt { get; internal set; }
+        public Account(int accountId, string name, decimal balance, byte[] password, byte[] salt)
         {
             AccountId = accountId;
             Name = name;
             Balance = balance;
+            Password = password;
+            Salt = salt;
         }
         public bool Withdrawal(decimal amount)
         {
@@ -51,6 +55,12 @@ namespace CruzadorBankGit.Entity
             if(amount <= 0) return false;
             Balance += amount;
             return true;
+        }
+        public void ChangePassword(byte[] password, byte[] salt)
+        {
+            // Optei por deixar a validacao no service
+            Password = password;
+            Salt = salt;
         }
     }
 }
