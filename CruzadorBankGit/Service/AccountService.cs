@@ -42,22 +42,36 @@ namespace CruzadorBankGit.Service
 
             return account.AccountId;
         }
-        public Account GetAccount(int accountId)
+        private Account GetAccount(int accountId)
         {
             if (accountId <= 0) throw new ArgumentOutOfRangeException(nameof(accountId), "Value Informed is not a valid Accont Id");
 
             return _accountRepository.GetAccount(accountId);
         }
-        public bool AccessVaidation(int accountId, string password)
+        public bool AccessVaidation(int accountId, string password) // excluir metodo depois da implementacao de AccountSessionService
         {
             Account account  = GetAccount(accountId);
             return PasswordVerify(password, account.Password, account.Salt);
         }
-        public ArrayList GetAccountData(int accountId, string password)
+        public ArrayList GetAccountData(int accountId, string password) // excluir metodo depois da implementacao de AccountSessionService
         {
             if(!AccessVaidation(accountId, password)) throw new ArgumentNullException(nameof(password), "Invalid password");
             Account account = GetAccount(accountId);
             return new ArrayList { account.AccountId, account.Name, account.Balance };
+        }
+
+        public IAccountSessionService Login(int accountId, string password)
+        {
+            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null");
+            if (accountId <= 0) throw new ArgumentOutOfRangeException(nameof(accountId), "AccountId should be a valid Integer bigger than 0");
+
+            Account account = _accountRepository.GetAccount(accountId); 
+
+            if (!PasswordVerify(password, account.Password, account.Salt)) throw new Exception(); //Criar password exception
+
+            // continuar implementacao do login
+
+            return new AccountSessionService();
         }
 
         public void PasswordContentVerifier(string password)

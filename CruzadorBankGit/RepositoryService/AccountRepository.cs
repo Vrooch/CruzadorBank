@@ -61,7 +61,7 @@ namespace CruzadorBankGit.Repository
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{accountId}");
             accountPath += ".json";
 
-            if (!File.Exists(accountPath)) throw new Exception("Account informed does not exists");
+            if (!File.Exists(accountPath)) throw new Exception("Account informed does not exists"); // Criar um exception para isso
 
             Account account;
             using (FileStream stream = new FileStream(accountPath, FileMode.Open))
