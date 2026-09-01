@@ -102,11 +102,9 @@ namespace CruzadorBankGit.Viewer
         {
             while (true)
             {
-                string name;
                 int accountId = 0;
 
                 _consoleUI.Head("ACCESS ACCOUNT");
-                name = _consoleUI.GetString("Enter the client name: ");
                 try
                 {
                     accountId = _consoleUI.GetInt("Enter the account Id: ");
@@ -127,15 +125,17 @@ namespace CruzadorBankGit.Viewer
                     continue;
                 }
 
-                ShowAccountData(name, accountId);
+                string password = _consoleUI.GetString("Enter the client name: ");
+
+                ShowAccountData(accountId, password);
                 break;
             }
 
         }
-        internal void ShowAccountData(string name, int accountId)
+        internal void ShowAccountData(int accountId, string password)
         {
             Console.Clear();
-            ArrayList data = _accountService.GetAccountData(name, accountId);
+            ArrayList data = _accountService.GetAccountData(accountId, password);
 
             _consoleUI.Head("ACCOUNT DATA");
             _consoleUI.ShowAccountData(data);

@@ -42,16 +42,21 @@ namespace CruzadorBankGit.Service
 
             return account.AccountId;
         }
-        public Account GetAccount(string name,  int accountId)
+        public Account GetAccount(int accountId)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name), "Name should be a valid, not null, empty or white Space message");
             if (accountId <= 0) throw new ArgumentOutOfRangeException(nameof(accountId), "Value Informed is not a valid Accont Id");
 
-            return _accountRepository.GetAccount(name, accountId);
+            return _accountRepository.GetAccount(accountId);
         }
-        public ArrayList GetAccountData(string name, int accountId)
+        public bool AccessVaidation(int accountId, string password)
         {
-            Account account = GetAccount(name, accountId);
+            Account account  = GetAccount(accountId);
+            return PasswordVerify(password, account.Password, account.Salt);
+        }
+        public ArrayList GetAccountData(int accountId, string password)
+        {
+            if(!AccessVaidation(accountId, password)) throw new ArgumentNullException(nameof(password), "Invalid password");
+            Account account = GetAccount(accountId);
             return new ArrayList { account.AccountId, account.Name, account.Balance };
         }
 
@@ -78,6 +83,7 @@ namespace CruzadorBankGit.Service
 
         public bool PasswordVerify(string password, byte[] currentPassword, byte[] salt)
         {
+            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null or empty");
             byte[] HashedPassword = PasswordHasher(password, salt);
             return CryptographicOperations.FixedTimeEquals(HashedPassword, currentPassword);
         }
