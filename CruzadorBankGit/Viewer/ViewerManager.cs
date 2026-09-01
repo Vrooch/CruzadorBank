@@ -125,7 +125,7 @@ namespace CruzadorBankGit.Viewer
                     continue;
                 }
 
-                string password = _consoleUI.GetString("Enter the client name: ");
+                string password = _consoleUI.GetString("Enter the password: ");
 
                 ShowAccountData(accountId, password);
                 break;
