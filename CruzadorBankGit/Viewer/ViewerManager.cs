@@ -100,6 +100,8 @@ namespace CruzadorBankGit.Viewer
         }
         internal void Login()
         {
+            IAccountSessionService accountSessionService;
+
             while (true)
             {
                 int accountId = 0;
@@ -127,14 +129,13 @@ namespace CruzadorBankGit.Viewer
 
                 string password = _consoleUI.GetString("Enter the password: ");
 
-                IAccountSessionService accountSessionService = _accountService.Login(accountId, password);
+                accountSessionService = _accountService.Login(accountId, password);
                 break;
             }
 
-            using ()
-            {
+            ViewerAccountSessionManager viewerAccountSessionManager = new ViewerAccountSessionManager(accountSessionService);
 
-            }
+            viewerAccountSessionManager.start();
 
         }
 
