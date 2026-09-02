@@ -21,15 +21,53 @@ namespace CruzadorBankGit.Viewer
         }
         public void start()
         {
-            _consoleUI.SpecialMessage("logado ...", ConsoleColor.Green);
+            _consoleUI.SpecialMessage("Login concluded with succes ...", ConsoleColor.Green);
 
             while (true)
             {
                 AccountDTO accountDTO = _accountSessionService.GetAccountData();
-                _consoleUI.Head($"Accpunt: {accountDTO.Id}");
+                _consoleUI.Head($"{accountDTO.Name} | {accountDTO.Id}");
+                _consoleUI.ShowBalance(accountDTO.Balance);
 
-                Console.ReadKey();
+                int option = -1;
+                try
+                {
+                    option = _consoleUI.SetAndSelectionEnumOption<ViewerSessionOptions, string>(GetViewerSessionOptionDictionary());
+                }
+                catch (FormatException ex)
+                {
+                    string message = $"{ex.Message} \nThe option must be a valid integer";
+                    _consoleUI.SpecialMessage(message);
+                }
+                switch ((ViewerSessionOptions)option)
+                {
+                    case ViewerSessionOptions.Leave:
+                        return;
+                    case ViewerSessionOptions.Withdrawal:
+                        Console.Clear();
+                        Console.WriteLine("Adicionar Withdrawal");
+                        Console.ReadKey();
+                        break;
+                    case ViewerSessionOptions.Deposit:
+                        Console.Clear();
+                        Console.WriteLine("Adicionar Deposit");
+                        Console.ReadKey();
+                        break;
+                    default:
+                        string message = "Select one of the avaliable aoption!!";
+                        _consoleUI.SpecialMessage(message);
+                        break;
+                }
             }
+        }
+        public Dictionary<ViewerSessionOptions, string> GetViewerSessionOptionDictionary()
+        {
+            return new Dictionary<ViewerSessionOptions, string>
+            {
+                {ViewerSessionOptions.Leave, "Leave"},
+                {ViewerSessionOptions.Withdrawal, "Make a withdawal"},
+                {ViewerSessionOptions.Deposit, "Make a deposit"}
+            };
         }
     }
 }

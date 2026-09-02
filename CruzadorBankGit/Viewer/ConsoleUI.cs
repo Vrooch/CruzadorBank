@@ -61,5 +61,13 @@ namespace CruzadorBankGit.Viewer
             Console.WriteLine($"Balance: \t\t\t\t {data[2].ToString()}");
             Console.ReadKey();
         }
+        public void ShowBalance (decimal value)
+        {
+            Console.Write("Current balance: . . . . . . ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            if (value <  0) Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(value);
+            Console.ResetColor();
+        }
     }
 }

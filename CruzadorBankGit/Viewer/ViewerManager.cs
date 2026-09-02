@@ -39,7 +39,7 @@ namespace CruzadorBankGit.Viewer
                     case EntryMenuOptions.CreateNewAccont:
                         this.CreateAccount();
                         break;
-                    case EntryMenuOptions.AccessAccount:
+                    case EntryMenuOptions.Login:
                         this.Login();
                         break;
                     default:
@@ -54,7 +54,7 @@ namespace CruzadorBankGit.Viewer
             return new Dictionary<EntryMenuOptions, string>()
             {
                 {EntryMenuOptions.CreateNewAccont, "Create New Account" },
-                {EntryMenuOptions.AccessAccount, "Access Account" },
+                {EntryMenuOptions.Login, "Account Login" },
                 {EntryMenuOptions.Leave, "Leave" }
             };
         }
