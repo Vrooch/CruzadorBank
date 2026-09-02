@@ -1,4 +1,5 @@
-﻿using CruzadorBankGit.Service;
+﻿using CruzadorBankGit.DataTransferObject;
+using CruzadorBankGit.Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,14 @@ namespace CruzadorBankGit.Viewer
         public void start()
         {
             _consoleUI.SpecialMessage("logado ...", ConsoleColor.Green);
+
+            while (true)
+            {
+                AccountDTO accountDTO = _accountSessionService.GetAccountData();
+                _consoleUI.Head($"Accpunt: {accountDTO.Id}");
+
+                Console.ReadKey();
+            }
         }
     }
 }

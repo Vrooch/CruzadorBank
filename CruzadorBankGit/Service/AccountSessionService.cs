@@ -16,15 +16,15 @@ namespace CruzadorBankGit.Service
             _account = account;
             _passwordService = new PasswordService();
         }
-        void IAccountSessionService.Deposit(decimal amount)
+        public void Deposit(decimal amount)
         {
             throw new NotImplementedException();
         }
-        AccountDTO IAccountSessionService.GetAccountData()
+        public AccountDTO GetAccountData()
         {
-            throw new NotImplementedException();
+            return new AccountDTO(_account.AccountId, _account.Name, _account.Balance);
         }
-        void IAccountSessionService.Withdrawal(decimal amount)
+        public void Withdrawal(decimal amount)
         {
             throw new NotImplementedException();
         }

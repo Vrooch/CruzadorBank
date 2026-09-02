@@ -40,7 +40,7 @@ namespace CruzadorBankGit.Viewer
                         this.CreateAccount();
                         break;
                     case EntryMenuOptions.AccessAccount:
-                        this.AccessAccount();
+                        this.Login();
                         break;
                     default:
                         string message = "Select one of the avaliable aoption!!";
