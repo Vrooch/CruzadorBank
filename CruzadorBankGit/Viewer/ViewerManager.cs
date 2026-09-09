@@ -129,8 +129,16 @@ namespace CruzadorBankGit.Viewer
 
                 string password = _consoleUI.GetString("Enter the password: ");
 
-                accountSessionService = _accountService.Login(accountId, password);
-                break;
+                try
+                {
+                    accountSessionService = _accountService.Login(accountId, password);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message);
+                    continue;
+                }
             }
 
             ViewerAccountSessionManager viewerAccountSessionManager = new ViewerAccountSessionManager(accountSessionService);

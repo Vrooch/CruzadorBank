@@ -44,13 +44,11 @@ namespace CruzadorBankGit.Viewer
                     case ViewerSessionOptions.Leave:
                         return;
                     case ViewerSessionOptions.Withdrawal:
-                        Console.Clear();
-                        Console.WriteLine("Adicionar Withdrawal");
+                        Withdrawal();
                         Console.ReadKey();
                         break;
                     case ViewerSessionOptions.Deposit:
-                        Console.Clear();
-                        Console.WriteLine("Adicionar Deposit");
+                        Deposit();
                         Console.ReadKey();
                         break;
                     default:
@@ -60,7 +58,7 @@ namespace CruzadorBankGit.Viewer
                 }
             }
         }
-        public Dictionary<ViewerSessionOptions, string> GetViewerSessionOptionDictionary()
+        internal Dictionary<ViewerSessionOptions, string> GetViewerSessionOptionDictionary()
         {
             return new Dictionary<ViewerSessionOptions, string>
             {
@@ -69,5 +67,19 @@ namespace CruzadorBankGit.Viewer
                 {ViewerSessionOptions.Deposit, "Make a deposit"}
             };
         }
+
+        internal void Withdrawal()
+        {
+            decimal amount = _consoleUI.AccountMoviment("Withdrawal");
+            Console.WriteLine(amount);
+            // Implementar a logica no AccountSessionService
+        }
+        internal void Deposit()
+        {
+            decimal amount = _consoleUI.AccountMoviment("Deposit");
+            Console.WriteLine(amount);
+            // Implementar a logica no AccountSessionService
+        }
+
     }
 }

@@ -69,5 +69,11 @@ namespace CruzadorBankGit.Viewer
             Console.WriteLine(value);
             Console.ResetColor();
         }
+        public decimal AccountMoviment(string operationType)
+        {
+            Console.WriteLine("\n-----------------------------------------------------");
+            Console.WriteLine($"{operationType} operation...");
+            return this.GetDecimal("Informe the amount: ");
+        }
     }
 }
