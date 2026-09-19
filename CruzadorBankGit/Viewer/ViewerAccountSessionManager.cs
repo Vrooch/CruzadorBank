@@ -71,8 +71,7 @@ namespace CruzadorBankGit.Viewer
         internal void Withdrawal()
         {
             decimal amount = _consoleUI.AccountMoviment("Withdrawal");
-            Console.WriteLine(amount);
-            // Implementar a logica no AccountSessionService
+            _accountSessionService.Withdrawal(amount);
         }
         internal void Deposit()
         {
