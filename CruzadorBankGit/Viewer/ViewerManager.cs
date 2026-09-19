@@ -29,9 +29,9 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    string message = $"{ex.Message} \nThe option must be a valid integer";
-                    _consoleUI.SpecialMessage(message);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 1250);
                 }
+                if (option == -1) continue;
                 switch ((EntryMenuOptions)option)
                 {
                     case EntryMenuOptions.Leave:
