@@ -21,11 +21,8 @@ namespace CruzadorBankGit.Service
         }
         public void Deposit(decimal amount)
         {
-            throw new NotImplementedException();
-            /*
-             * 1. Chamar o metodo responsavel por realizar a operacao
-             * 2. Salvar as alteracoes
-             */
+            _account.Deposit(amount);
+            _accountRepository.SaveAccount(this._account);
         }
         public AccountDTO GetAccountData()
         {
@@ -33,13 +30,12 @@ namespace CruzadorBankGit.Service
         }
         public void Withdrawal(decimal amount)
         {
-            /*
-             * 1. Chamar o metodo responsavel por realizar a operacao
-             * 2. Salvar as alteracoes
-             */
             _account.Withdrawal(amount);
             _accountRepository.SaveAccount(this._account);
-
+        }
+        public void SaveAccount()
+        {
+            _accountRepository.SaveAccount(this._account);
         }
     }
 }

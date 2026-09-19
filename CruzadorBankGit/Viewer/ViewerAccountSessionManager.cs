@@ -21,7 +21,7 @@ namespace CruzadorBankGit.Viewer
         }
         public void start()
         {
-            _consoleUI.SpecialMessage("Login concluded with succes ...", ConsoleColor.Green);
+            _consoleUI.SpecialMessage("Login concluded with succes ...", ConsoleColor.Green, timer: true, time:1500);
 
             while (true)
             {
@@ -42,14 +42,13 @@ namespace CruzadorBankGit.Viewer
                 switch ((ViewerSessionOptions)option)
                 {
                     case ViewerSessionOptions.Leave:
+                        _accountSessionService.SaveAccount();
                         return;
                     case ViewerSessionOptions.Withdrawal:
                         Withdrawal();
-                        Console.ReadKey();
                         break;
                     case ViewerSessionOptions.Deposit:
                         Deposit();
-                        Console.ReadKey();
                         break;
                     default:
                         string message = "Select one of the avaliable aoption!!";
@@ -72,12 +71,13 @@ namespace CruzadorBankGit.Viewer
         {
             decimal amount = _consoleUI.AccountMoviment("Withdrawal");
             _accountSessionService.Withdrawal(amount);
+            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
         }
         internal void Deposit()
         {
             decimal amount = _consoleUI.AccountMoviment("Deposit");
-            Console.WriteLine(amount);
-            // Implementar a logica no AccountSessionService
+            _accountSessionService.Deposit(amount);
+            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
         }
 
     }
