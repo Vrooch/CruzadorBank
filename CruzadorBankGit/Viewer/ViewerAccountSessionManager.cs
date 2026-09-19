@@ -1,0 +1,84 @@
+﻿using CruzadorBankGit.DataTransferObject;
+using CruzadorBankGit.Service;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace CruzadorBankGit.Viewer
+{
+    /// <summary>
+    /// To orchestrate the viewer layer during the user session in user account
+    /// </summary>
+    internal class ViewerAccountSessionManager
+    {
+        private readonly IAccountSessionService _accountSessionService;
+        private readonly ConsoleUI _consoleUI;
+
+        public ViewerAccountSessionManager(IAccountSessionService accountSessionService)
+        {
+            _accountSessionService = accountSessionService;
+            _consoleUI = new ConsoleUI();
+        }
+        public void start()
+        {
+            _consoleUI.SpecialMessage("Login concluded with succes ...", ConsoleColor.Green, timer: true, time:1500);
+
+            while (true)
+            {
+                AccountDTO accountDTO = _accountSessionService.GetAccountData();
+                _consoleUI.Head($"{accountDTO.Name} | {accountDTO.Id}");
+                _consoleUI.ShowBalance(accountDTO.Balance);
+
+                int option = -1;
+                try
+                {
+                    option = _consoleUI.SetAndSelectionEnumOption<ViewerSessionOptions, string>(GetViewerSessionOptionDictionary());
+                }
+                catch (FormatException ex)
+                {
+                    string message = $"{ex.Message} \nThe option must be a valid integer";
+                    _consoleUI.SpecialMessage(message);
+                }
+                switch ((ViewerSessionOptions)option)
+                {
+                    case ViewerSessionOptions.Leave:
+                        _accountSessionService.SaveAccount();
+                        return;
+                    case ViewerSessionOptions.Withdrawal:
+                        Withdrawal();
+                        break;
+                    case ViewerSessionOptions.Deposit:
+                        Deposit();
+                        break;
+                    default:
+                        string message = "Select one of the avaliable aoption!!";
+                        _consoleUI.SpecialMessage(message);
+                        break;
+                }
+            }
+        }
+        internal Dictionary<ViewerSessionOptions, string> GetViewerSessionOptionDictionary()
+        {
+            return new Dictionary<ViewerSessionOptions, string>
+            {
+                {ViewerSessionOptions.Leave, "Leave"},
+                {ViewerSessionOptions.Withdrawal, "Make a withdawal"},
+                {ViewerSessionOptions.Deposit, "Make a deposit"}
+            };
+        }
+
+        internal void Withdrawal()
+        {
+            decimal amount = _consoleUI.AccountMoviment("Withdrawal");
+            _accountSessionService.Withdrawal(amount);
+            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
+        }
+        internal void Deposit()
+        {
+            decimal amount = _consoleUI.AccountMoviment("Deposit");
+            _accountSessionService.Deposit(amount);
+            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
+        }
+
+    }
+}

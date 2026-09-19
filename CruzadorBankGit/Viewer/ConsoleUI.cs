@@ -25,15 +25,17 @@ namespace CruzadorBankGit.Viewer
             Console.Write("\nEnter the chosen option: ");
             return Convert.ToInt32(Console.ReadLine());
         }
-        public void SpecialMessage (string message, ConsoleColor color = ConsoleColor.Red, bool clear = true)
+        public void SpecialMessage (string message, ConsoleColor color = ConsoleColor.Red, bool clear = true, bool timer = false, int time = 0)
         {
             if (clear) Console.Clear();
+            else Console.WriteLine();
             if (string.IsNullOrWhiteSpace(message)) throw new ArgumentNullException(nameof(message), "message should be a valid, not null, empty or white Space message");
             Console.ForegroundColor = color;
             Console.WriteLine(message);
             Console.WriteLine("---------------------------------------------------------------------------\n");
             Console.ResetColor();
-            Console.ReadKey();
+            if (timer) Thread.Sleep(time);
+            else Console.ReadKey();
         }
         public int GetInt(string message, bool clear = false)
         {
@@ -60,6 +62,20 @@ namespace CruzadorBankGit.Viewer
             Console.WriteLine($"Account Id: \t\t\t\t {data[0]}");
             Console.WriteLine($"Balance: \t\t\t\t {data[2].ToString()}");
             Console.ReadKey();
+        }
+        public void ShowBalance (decimal value)
+        {
+            Console.Write("Current balance: . . . . . . ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            if (value <  0) Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(value);
+            Console.ResetColor();
+        }
+        public decimal AccountMoviment(string operationType)
+        {
+            Console.WriteLine("\n-----------------------------------------------------");
+            Console.WriteLine($"{operationType} operation...");
+            return this.GetDecimal("Informe the amount: ");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CruzadorBankGit.Viewer
 {
     internal class ViewerManager
     {
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
         private readonly ConsoleUI _consoleUI;
         public ViewerManager()
         {
@@ -39,8 +39,8 @@ namespace CruzadorBankGit.Viewer
                     case EntryMenuOptions.CreateNewAccont:
                         this.CreateAccount();
                         break;
-                    case EntryMenuOptions.AccessAccount:
-                        this.AccessAccount();
+                    case EntryMenuOptions.Login:
+                        this.Login();
                         break;
                     default:
                         string message = "Select one of the avaliable aoption!!";
@@ -54,7 +54,7 @@ namespace CruzadorBankGit.Viewer
             return new Dictionary<EntryMenuOptions, string>()
             {
                 {EntryMenuOptions.CreateNewAccont, "Create New Account" },
-                {EntryMenuOptions.AccessAccount, "Access Account" },
+                {EntryMenuOptions.Login, "Account Login" },
                 {EntryMenuOptions.Leave, "Leave" }
             };
         }
@@ -98,8 +98,10 @@ namespace CruzadorBankGit.Viewer
                 break;
             }
         }
-        internal void AccessAccount()
+        internal void Login()
         {
+            IAccountSessionService accountSessionService;
+
             while (true)
             {
                 int accountId = 0;
@@ -127,18 +129,23 @@ namespace CruzadorBankGit.Viewer
 
                 string password = _consoleUI.GetString("Enter the password: ");
 
-                ShowAccountData(accountId, password);
-                break;
+                try
+                {
+                    accountSessionService = _accountService.Login(accountId, password);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message);
+                    continue;
+                }
             }
 
-        }
-        internal void ShowAccountData(int accountId, string password)
-        {
-            Console.Clear();
-            ArrayList data = _accountService.GetAccountData(accountId, password);
+            ViewerAccountSessionManager viewerAccountSessionManager = new ViewerAccountSessionManager(accountSessionService);
 
-            _consoleUI.Head("ACCOUNT DATA");
-            _consoleUI.ShowAccountData(data);
+            viewerAccountSessionManager.start();
+
         }
+
     }
 }

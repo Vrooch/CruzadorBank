@@ -43,18 +43,16 @@ namespace CruzadorBankGit.Entity
             Password = password;
             Salt = salt;
         }
-        public bool Withdrawal(decimal amount)
+        public void Withdrawal(decimal amount)
         {
-            if (amount <= 0) return false;
-            if (amount >= Balance) return false;
+            if (amount <= 0) throw new ArgumentOutOfRangeException(nameof(amount), "The amount should be bigger than 0");
+            if (amount >= Balance) throw new ArgumentOutOfRangeException(nameof(amount), "Not enougth balance");
             Balance -= amount;
-            return true;
         }
-        public bool Deposit(decimal amount)
+        public void Deposit(decimal amount)
         {
-            if(amount <= 0) return false;
+            if(amount <= 0) throw new ArgumentOutOfRangeException(nameof(amount), "The amount should be bigger than 0");
             Balance += amount;
-            return true;
         }
         public void ChangePassword(byte[] password, byte[] salt)
         {

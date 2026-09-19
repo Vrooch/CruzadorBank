@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataTransferObject\" />
+    <Folder Include="Service\NovaPasta\" />
   </ItemGroup>
 
 </Project>
