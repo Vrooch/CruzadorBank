@@ -61,9 +61,9 @@ namespace CruzadorBankGit.Viewer
         {
             return new Dictionary<ViewerSessionOptions, string>
             {
-                {ViewerSessionOptions.Leave, "Leave"},
                 {ViewerSessionOptions.Withdrawal, "Make a withdawal"},
-                {ViewerSessionOptions.Deposit, "Make a deposit"}
+                {ViewerSessionOptions.Deposit, "Make a deposit"},
+                {ViewerSessionOptions.Leave, "Leave"}
             };
         }
 

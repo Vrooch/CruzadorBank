@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Password;
 using CruzadorBankGit.Repository;
 using Konscious.Security.Cryptography;
 using System;
@@ -21,9 +22,14 @@ namespace CruzadorBankGit.Service
         }
         public int CreateAccount(string name, decimal balance, string password, string passwordConfirmation)
         {
-            if(balance < 0) throw new ArgumentOutOfRangeException(nameof(balance), "Balance should be equals ou bigger than 0");
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name), "Name should be a valid, not null, empty or white Space message");
-            if(password != passwordConfirmation) throw new ArgumentNullException(nameof(passwordConfirmation), "Both password should be equals");
+            if (balance < 0) throw new ArgumentOutOfRangeException("Balance should be equals ou bigger than 0");
+            
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(null, "Name should be a valid, not null, empty or white Space message");
+            if (name[name.Length - 1] == ' ') name = name[..^1]; // remover " "
+            if (!name.Split(' ').All(x => x[0].ToString() == x[0].ToString().ToUpper())) throw new ArgumentException("A inicial de cada nome deve estar em caixa alta");
+            if (!name.Split(' ').All(x => x[1..] == x[1..].ToLower())) throw new ArgumentException("Somente a inicial de cada nome deve estar em caixa alta");
+
+            if (password != passwordConfirmation) throw new PasswordContentException("Both password should be equals");
             _passwordService.PasswordContentVerifier(password);
 
             byte[] salt = RandomNumberGenerator.GetBytes(16);

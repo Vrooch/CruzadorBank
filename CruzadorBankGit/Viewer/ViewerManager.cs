@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Password;
 using CruzadorBankGit.Service;
 using CruzadorBankGit.Viewer;
 using System;
@@ -75,26 +76,50 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number");
+                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number", clear: false, timer: true, time: 1500);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}");
+                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 1500);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Not defined error: \n{ex.Message}");
+                    _consoleUI.SpecialMessage($"Not defined error: \n{ex.Message}", clear: false, timer: true, time: 1500);
                     continue;
                 }
 
                 password = _consoleUI.GetString("Enter the password: ");
                 passwordConfrimation = _consoleUI.GetString("Confirme the password: ");
 
-                int accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
+                int accountId = 0;
 
-                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green);
+                try
+                {
+                    accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
+                }
+                catch (PasswordContentException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    continue;
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    continue;
+                }
+                catch (ArgumentNullException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    continue;
+                }
+                catch (ArgumentException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    continue;
+                }
+                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green, false, true,  1500);
                 break;
             }
         }
