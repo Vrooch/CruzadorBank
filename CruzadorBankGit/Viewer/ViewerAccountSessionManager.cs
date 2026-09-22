@@ -69,9 +69,33 @@ namespace CruzadorBankGit.Viewer
 
         internal void Withdrawal()
         {
-            decimal amount = _consoleUI.AccountMoviment("Withdrawal");
-            _accountSessionService.Withdrawal(amount);
-            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
+            while (true)
+            {
+                decimal amount;
+
+                try
+                {
+                    amount = _consoleUI.AccountMoviment("Withdrawal");
+                }
+                catch (FormatException ex)
+                {
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 2000);
+                    continue;
+                }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 2000);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2000);
+                    continue;
+                }
+                _accountSessionService.Withdrawal(amount);
+                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 2000);
+                break;
+            }
         }
         internal void Deposit()
         {

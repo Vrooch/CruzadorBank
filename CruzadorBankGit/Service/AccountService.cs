@@ -54,7 +54,7 @@ namespace CruzadorBankGit.Service
 
             Account account = _accountRepository.GetAccount(accountId); 
 
-            if (!_passwordService.PasswordVerify(password, account.Password, account.Salt)) throw new Exception(); //Criar PasswordException
+            if (!_passwordService.PasswordVerify(password, account.Password, account.Salt)) throw new PasswordException("Wrong Password informed"); //Criar PasswordException
 
             return new AccountSessionService(account);
         }

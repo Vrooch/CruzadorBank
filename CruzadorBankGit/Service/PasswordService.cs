@@ -19,8 +19,6 @@ namespace CruzadorBankGit.Service
             if (password.Length <= 5) throw new PasswordContentException("The password should be bigger than 5 character");
             if (!password.Any(char.IsUpper)) throw new PasswordContentException("Password should have at least one upper case letter");
             if (!password.Any(char.IsLower)) throw new PasswordContentException("Password should have at least one lower case letter");
-            //adicionar novas regras de composicao de senhas
-            // Ver isso com o professor!! - nao tem problema nao retornar nada
         }
         public byte[] PasswordHasher(string password, byte[] salt)
         {
@@ -36,7 +34,7 @@ namespace CruzadorBankGit.Service
         }
         public bool PasswordVerify(string password, byte[] currentPassword, byte[] salt)
         {
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null or empty");
+            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(null, "Password should not be null or empty");
             byte[] HashedPassword = PasswordHasher(password, salt);
             return CryptographicOperations.FixedTimeEquals(HashedPassword, currentPassword);
         }

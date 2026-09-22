@@ -30,9 +30,16 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 1250);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 4000);
+                    continue;
                 }
-                if (option == -1) continue;
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
+
                 switch ((EntryMenuOptions)option)
                 {
                     case EntryMenuOptions.Leave:
@@ -76,17 +83,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number", clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Not defined error: \n{ex.Message}", clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
                     continue;
                 }
 
@@ -101,25 +108,31 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (PasswordContentException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (ArgumentNullException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (ArgumentException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 1500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
                 }
-                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green, false, true,  1500);
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
+                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green, false, true,  4000);
                 break;
             }
         }
@@ -138,17 +151,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The account ID should be a valid integer number");
+                    _consoleUI.SpecialMessage("The account ID should be a valid integer number", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The account ID should be a positive equals or bigger than 0, and lower then {int.MaxValue}");
+                    _consoleUI.SpecialMessage($"The account ID should be a positive equals or bigger than 0, and lower then {int.MaxValue}", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
                     continue;
                 }
 
@@ -159,9 +172,14 @@ namespace CruzadorBankGit.Viewer
                     accountSessionService = _accountService.Login(accountId, password);
                     break;
                 }
+                catch(PasswordException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
+                    continue;
+                }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
                     continue;
                 }
             }
