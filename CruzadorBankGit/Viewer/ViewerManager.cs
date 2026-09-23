@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Account;
 using CruzadorBankGit.Exceptions.Password;
 using CruzadorBankGit.Service;
 using CruzadorBankGit.Viewer;
@@ -117,7 +118,7 @@ namespace CruzadorBankGit.Viewer
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
                 }
-                catch (ArgumentOutOfRangeException ex)
+                catch (FinancialAmountException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
@@ -179,6 +180,11 @@ namespace CruzadorBankGit.Viewer
                     break;
                 }
                 catch(PasswordException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (AccountException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;

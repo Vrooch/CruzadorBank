@@ -109,7 +109,7 @@ namespace CruzadorBankGit.Viewer
                 {
                     _accountSessionService.Withdrawal(amount);
                 }
-                catch (MovementException ex)
+                catch (FinancialAmountException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;
@@ -153,7 +153,7 @@ namespace CruzadorBankGit.Viewer
                 {
                     _accountSessionService.Deposit(amount);
                 }
-                catch (MovementException ex)
+                catch (FinancialAmountException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;

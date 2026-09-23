@@ -24,7 +24,7 @@ namespace CruzadorBankGit.Service
         }
         public int CreateAccount(string name, decimal balance, string password, string passwordConfirmation)
         {
-            if (balance < 0) throw new ArgumentOutOfRangeException("Balance should be equals ou bigger than 0");
+            if (balance < 0) throw new FinancialAmountException("Balance should be equals ou bigger than 0");
             
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(null, "Name should be a valid, not null, empty or white Space message");
             if (name[name.Length - 1] == ' ') name = name[..^1]; // remover " "
