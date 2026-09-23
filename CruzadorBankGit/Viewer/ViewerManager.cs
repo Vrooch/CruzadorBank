@@ -33,12 +33,16 @@ namespace CruzadorBankGit.Viewer
                     _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 4000);
                     continue;
                 }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 4000);
+                    continue;
+                }
                 catch (Exception ex)
                 {
                     _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
                     continue;
                 }
-
 
                 switch ((EntryMenuOptions)option)
                 {
@@ -76,7 +80,9 @@ namespace CruzadorBankGit.Viewer
                 string passwordConfrimation;
 
                 _consoleUI.Head("CREATE NEW ACCOUNT");
+
                 name = _consoleUI.GetString("Enter the client name: ");
+
                 try
                 {
                     initialBalance = _consoleUI.GetDecimal("Enter the initial account balance: ");

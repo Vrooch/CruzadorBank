@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.DataTransferObject;
+using CruzadorBankGit.Exceptions.Account;
 using CruzadorBankGit.Service;
 using System;
 using System.Collections.Generic;
@@ -36,9 +37,20 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 1250);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 4000);
+                    continue;
                 }
-                if (option == -1) continue;
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
                 switch ((ViewerSessionOptions)option)
                 {
                     case ViewerSessionOptions.Leave:
@@ -79,29 +91,82 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 2000);
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 2000);
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 4000);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2000);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
                     continue;
                 }
-                _accountSessionService.Withdrawal(amount);
-                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 2000);
+
+                try
+                {
+                    _accountSessionService.Withdrawal(amount);
+                }
+                catch (MovementException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
+                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 4000);
                 break;
             }
         }
         internal void Deposit()
         {
-            decimal amount = _consoleUI.AccountMoviment("Deposit");
-            _accountSessionService.Deposit(amount);
-            _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 1500);
+            while (true)
+            {
+                decimal amount;
+                try
+                {
+                    amount = _consoleUI.AccountMoviment("Deposit");
+                }
+                catch (FormatException ex)
+                {
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
+                try
+                {
+                    _accountSessionService.Deposit(amount);
+                }
+                catch (MovementException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 4000);
+                    continue;
+                }
+
+                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 4000);
+                break;
+            }
         }
 
     }

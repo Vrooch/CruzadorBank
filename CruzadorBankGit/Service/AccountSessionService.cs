@@ -11,12 +11,10 @@ namespace CruzadorBankGit.Service
     internal class AccountSessionService : IAccountSessionService
     {
         private readonly Account _account;
-        private readonly PasswordService _passwordService; // ver de remover
         private readonly AccountRepository _accountRepository;
         public AccountSessionService(Account account)
         {
             _account = account;
-            _passwordService = new PasswordService();
             _accountRepository = new AccountRepository();
         }
         public void Deposit(decimal amount)

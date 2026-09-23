@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.Exceptions.Password;
+using CruzadorBankGit.ResultObjects;
 using Konscious.Security.Cryptography;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,15 @@ namespace CruzadorBankGit.Service
         public int MemorySize = 65536; // Custo de memoria --> aprox 64mb
         public int Iterations = 3; // Numero de ciclos
 
-        public void PasswordContentVerifier(string password)
+        public IValidationResult PasswordContentVerifier(string password)
         {
-            if (string.IsNullOrEmpty(password)) throw new PasswordContentException("Password should not be null or empty");
-            if (password.Length <= 5) throw new PasswordContentException("The password should be bigger than 5 character");
-            if (!password.Any(char.IsUpper)) throw new PasswordContentException("Password should have at least one upper case letter");
-            if (!password.Any(char.IsLower)) throw new PasswordContentException("Password should have at least one lower case letter");
+            ValidationResult validationResult = new ValidationResult();
+            if (string.IsNullOrEmpty(password)) validationResult.ThrowError("Password should not be null or empty");
+            if (password.Length <= 5) validationResult.ThrowError("The password should be bigger than 5 character");
+            if (!password.Any(char.IsUpper)) validationResult.ThrowError("Password should have at least one upper case letter");
+            if (!password.Any(char.IsLower)) validationResult.ThrowError("Password should have at least one lower case letter");
+
+            return validationResult;
         }
         public byte[] PasswordHasher(string password, byte[] salt)
         {

@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace CruzadorBankGit.Exceptions.Nome
+{
+    internal class NameException
+    {
+        internal class PasswordException : Exception
+        {
+            public PasswordException() : base() { }
+            public PasswordException(string message) : base(message) { }
+            public PasswordException(string message, Exception? innerException) : base(message, innerException) { }
+        }
+    }
+}

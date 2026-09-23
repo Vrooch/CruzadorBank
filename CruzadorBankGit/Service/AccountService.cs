@@ -1,6 +1,8 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Account;
 using CruzadorBankGit.Exceptions.Password;
 using CruzadorBankGit.Repository;
+using CruzadorBankGit.ResultObjects;
 using Konscious.Security.Cryptography;
 using System;
 using System.Collections;
@@ -30,7 +32,9 @@ namespace CruzadorBankGit.Service
             if (!name.Split(' ').All(x => x[1..] == x[1..].ToLower())) throw new ArgumentException("Somente a inicial de cada nome deve estar em caixa alta");
 
             if (password != passwordConfirmation) throw new PasswordContentException("Both password should be equals");
-            _passwordService.PasswordContentVerifier(password);
+
+            IValidationResult passwordContantValidation = _passwordService.PasswordContentVerifier(password);
+            if (!passwordContantValidation.Result) throw new PasswordContentException(passwordContantValidation.GetMessage());
 
             byte[] salt = RandomNumberGenerator.GetBytes(16);
 
@@ -49,12 +53,12 @@ namespace CruzadorBankGit.Service
         }
         public IAccountSessionService Login(int accountId, string password)
         {
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null");
-            if (accountId <= 0) throw new ArgumentOutOfRangeException(nameof(accountId), "AccountId should be a valid Integer bigger than 0");
+            if (string.IsNullOrEmpty(password)) throw new PasswordException("Password should not be null");
+            if (accountId <= 0) throw new AccountException( "AccountId should be a valid Integer bigger than 0");
 
             Account account = _accountRepository.GetAccount(accountId); 
 
-            if (!_passwordService.PasswordVerify(password, account.Password, account.Salt)) throw new PasswordException("Wrong Password informed"); //Criar PasswordException
+            if (!_passwordService.PasswordVerify(password, account.Password, account.Salt)) throw new PasswordException("Wrong Password informed");
 
             return new AccountSessionService(account);
         }
