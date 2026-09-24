@@ -56,8 +56,7 @@ namespace CruzadorBankGit.Viewer
                         this.Login();
                         break;
                     default:
-                        string message = "Select one of the avaliable aoption!!";
-                        _consoleUI.SpecialMessage(message);
+                        _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true, time: 4000);
                         break;
                 }
             }
@@ -114,6 +113,11 @@ namespace CruzadorBankGit.Viewer
                     accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
                 }
                 catch (PasswordContentException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
+                    continue;
+                }
+                catch (FormatException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 4000);
                     continue;

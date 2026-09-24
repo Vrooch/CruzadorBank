@@ -47,7 +47,7 @@ namespace CruzadorBankGit.Entity
         public void Withdrawal(decimal amount)
         {
             if (amount <= 0) throw new FinancialAmountException( "The amount should be bigger than 0");
-            if (amount >= Balance) throw new FinancialAmountException("Not enougth balance");
+            if (amount > Balance) throw new FinancialAmountException("Not enougth balance");
             Balance -= amount;
         }
         public void Deposit(decimal amount)

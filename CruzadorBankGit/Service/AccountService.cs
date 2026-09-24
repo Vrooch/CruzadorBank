@@ -28,8 +28,9 @@ namespace CruzadorBankGit.Service
             
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(null, "Name should be a valid, not null, empty or white Space message");
             if (name[name.Length - 1] == ' ') name = name[..^1]; // remover " "
-            if (!name.Split(' ').All(x => x[0].ToString() == x[0].ToString().ToUpper())) throw new ArgumentException("A inicial de cada nome deve estar em caixa alta");
-            if (!name.Split(' ').All(x => x[1..] == x[1..].ToLower())) throw new ArgumentException("Somente a inicial de cada nome deve estar em caixa alta");
+            if (!name.Split(' ').All(x => x.All(char.IsLetter))) throw new FormatException("Name should contains only letters");
+            if (!name.Split(' ').All(x => x[0].ToString() == x[0].ToString().ToUpper())) throw new ArgumentException("Evrey name should start with a uppercase letter");
+            if (!name.Split(' ').All(x => x[1..] == x[1..].ToLower())) throw new ArgumentException("just the first letter should be in uppercase");
 
             if (password != passwordConfirmation) throw new PasswordContentException("Both password should be equals");
 

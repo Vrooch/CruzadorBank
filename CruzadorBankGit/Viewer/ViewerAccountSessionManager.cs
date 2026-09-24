@@ -63,8 +63,7 @@ namespace CruzadorBankGit.Viewer
                         Deposit();
                         break;
                     default:
-                        string message = "Select one of the avaliable aoption!!";
-                        _consoleUI.SpecialMessage(message);
+                        _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true, time: 4000);
                         break;
                 }
             }
