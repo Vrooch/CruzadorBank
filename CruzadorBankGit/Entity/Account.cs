@@ -1,6 +1,7 @@
 ﻿using CruzadorBankGit.Exceptions.Account;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Text;
 
 namespace CruzadorBankGit.Entity
@@ -46,6 +47,7 @@ namespace CruzadorBankGit.Entity
         }
         public void Withdrawal(decimal amount)
         {
+            if (Balance == 0) throw new ZeroBalanceException("Account Without Balance");
             if (amount <= 0) throw new FinancialAmountException( "The amount should be bigger than 0");
             if (amount > Balance) throw new FinancialAmountException("Not enougth balance");
             Balance -= amount;
