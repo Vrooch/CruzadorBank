@@ -37,17 +37,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
@@ -63,7 +63,7 @@ namespace CruzadorBankGit.Viewer
                         Deposit();
                         break;
                     default:
-                        _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true, time: 2500);
+                        _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true);
                         break;
                 }
             }
@@ -80,8 +80,16 @@ namespace CruzadorBankGit.Viewer
 
         internal void Withdrawal()
         {
+            int attemptsAmount = 0;
             while (true)
             {
+                if (attemptsAmount == 3)
+                {
+                    _consoleUI.SpecialMessage("Maximum attempts amount reached", clear: false, timer: true);
+                    return;
+                }
+                attemptsAmount++;
+
                 decimal amount;
 
                 try
@@ -90,17 +98,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
@@ -110,18 +118,18 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FinancialAmountException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;
                 }
                 catch (ZeroBalanceException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     break;
                     // Nesse caso aplicamos breack porque se n sair da operacao, o user ficara preso em um loop de exception sem saida
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
@@ -131,8 +139,16 @@ namespace CruzadorBankGit.Viewer
         }
         internal void Deposit()
         {
+            int attemptsAmount = 0;
             while (true)
             {
+                if (attemptsAmount == 3)
+                {
+                    _consoleUI.SpecialMessage("Maximum attempts amount reached", clear: false, timer: true);
+                    return;
+                }
+                attemptsAmount++;
+
                 decimal amount;
                 try
                 {
@@ -140,17 +156,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
@@ -160,16 +176,16 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FinancialAmountException ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true, time: 2500);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
-                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true, 2500);
+                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true);
                 break;
             }
         }

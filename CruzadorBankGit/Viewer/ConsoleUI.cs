@@ -25,7 +25,7 @@ namespace CruzadorBankGit.Viewer
             Console.Write("\nEnter the chosen option: ");
             return Convert.ToInt32(Console.ReadLine());
         }
-        public void SpecialMessage (string message, ConsoleColor color = ConsoleColor.Red, bool clear = true, bool timer = false, int time = 0)
+        public void SpecialMessage (string message, ConsoleColor color = ConsoleColor.Red, bool clear = true, bool timer = false, int time = 2500)
         {
             if (clear) Console.Clear();
             else Console.WriteLine();
