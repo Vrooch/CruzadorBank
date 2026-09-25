@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CruzadorBankGit.Exceptions.Account;
+using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Text;
 
 namespace CruzadorBankGit.Entity
@@ -45,20 +47,15 @@ namespace CruzadorBankGit.Entity
         }
         public void Withdrawal(decimal amount)
         {
-            if (amount <= 0) throw new ArgumentOutOfRangeException(nameof(amount), "The amount should be bigger than 0");
-            if (amount >= Balance) throw new ArgumentOutOfRangeException(nameof(amount), "Not enougth balance");
+            if (Balance == 0) throw new ZeroBalanceException("Account Without Balance");
+            if (amount <= 0) throw new FinancialAmountException( "The amount should be bigger than 0");
+            if (amount > Balance) throw new FinancialAmountException("Not enougth balance");
             Balance -= amount;
         }
         public void Deposit(decimal amount)
         {
-            if(amount <= 0) throw new ArgumentOutOfRangeException(nameof(amount), "The amount should be bigger than 0");
+            if(amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
             Balance += amount;
-        }
-        public void ChangePassword(byte[] password, byte[] salt)
-        {
-            // Optei por deixar a validacao no service
-            Password = password;
-            Salt = salt;
         }
     }
 }

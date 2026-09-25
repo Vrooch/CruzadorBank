@@ -1,4 +1,6 @@
-﻿using Konscious.Security.Cryptography;
+﻿using CruzadorBankGit.Exceptions.Password;
+using CruzadorBankGit.ResultObjects;
+using Konscious.Security.Cryptography;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -12,13 +14,15 @@ namespace CruzadorBankGit.Service
         public int MemorySize = 65536; // Custo de memoria --> aprox 64mb
         public int Iterations = 3; // Numero de ciclos
 
-        public void PasswordContentVerifier(string password)
+        public IValidationResult PasswordContentVerifier(string password)
         {
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null or empty");
-            if (password.Length <= 5) throw new ArgumentOutOfRangeException(nameof(password), "The password should be bigger than 5 character");
-            if (!password.Any(char.IsUpper)) throw new ArgumentException(nameof(password), "Password should have at least one uppert case letter");
-            //adicionar novas regras de composicao de senhas
-            // Ver isso com o professor!! - nao tem problema nao retornar nada
+            ValidationResult validationResult = new ValidationResult();
+            if (string.IsNullOrEmpty(password)) validationResult.ThrowError("Password should not be null or empty");
+            if (password.Length <= 5) validationResult.ThrowError("The password should be bigger than 5 character");
+            if (!password.Any(char.IsUpper)) validationResult.ThrowError("Password should have at least one upper case letter");
+            if (!password.Any(char.IsLower)) validationResult.ThrowError("Password should have at least one lower case letter");
+
+            return validationResult;
         }
         public byte[] PasswordHasher(string password, byte[] salt)
         {
@@ -34,7 +38,7 @@ namespace CruzadorBankGit.Service
         }
         public bool PasswordVerify(string password, byte[] currentPassword, byte[] salt)
         {
-            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password), "Password should not be null or empty");
+            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(null, "Password should not be null or empty");
             byte[] HashedPassword = PasswordHasher(password, salt);
             return CryptographicOperations.FixedTimeEquals(HashedPassword, currentPassword);
         }

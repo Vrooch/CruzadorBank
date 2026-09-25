@@ -1,4 +1,6 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Account;
+using CruzadorBankGit.Exceptions.Password;
 using CruzadorBankGit.Service;
 using CruzadorBankGit.Viewer;
 using System;
@@ -29,9 +31,20 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    string message = $"{ex.Message} \nThe option must be a valid integer";
-                    _consoleUI.SpecialMessage(message);
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true);
+                    continue;
                 }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage("The option must be an INTEGER, that curresponds to a valid option", clear: false, timer: true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
+                    continue;
+                }
+
                 switch ((EntryMenuOptions)option)
                 {
                     case EntryMenuOptions.Leave:
@@ -43,8 +56,7 @@ namespace CruzadorBankGit.Viewer
                         this.Login();
                         break;
                     default:
-                        string message = "Select one of the avaliable aoption!!";
-                        _consoleUI.SpecialMessage(message);
+                        _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true);
                         break;
                 }
             }
@@ -60,41 +72,91 @@ namespace CruzadorBankGit.Viewer
         }
         internal void CreateAccount()
         {
+            int attemptsAmount = 0;
             while (true)
             {
+                if (attemptsAmount == 3)
+                {
+                    _consoleUI.SpecialMessage("Maximum attempts amount reached", clear: false, timer: true);
+                    return;
+                }
+                attemptsAmount++;
+
                 string name;
                 decimal initialBalance = 0;
                 string password;
                 string passwordConfrimation;
 
                 _consoleUI.Head("CREATE NEW ACCOUNT");
+
                 name = _consoleUI.GetString("Enter the client name: ");
+
                 try
                 {
                     initialBalance = _consoleUI.GetDecimal("Enter the initial account balance: ");
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number");
+                    _consoleUI.SpecialMessage("The Initial balance should be a valid decimal number", clear: false, timer: true);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}");
+                    _consoleUI.SpecialMessage($"The initinal number should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage($"Not defined error: \n{ex.Message}");
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
                 password = _consoleUI.GetString("Enter the password: ");
                 passwordConfrimation = _consoleUI.GetString("Confirme the password: ");
 
-                int accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
+                int accountId = 0;
 
-                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green);
+                try
+                {
+                    accountId = _accountService.CreateAccount(name, initialBalance, password, passwordConfrimation);
+                }
+                catch (PasswordContentException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (AccountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (FormatException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (FinancialAmountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (ArgumentNullException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (ArgumentException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
+                    continue;
+                }
+
+                _consoleUI.SpecialMessage($"Account creation Successfully complited\nNew Account ID: {accountId}", ConsoleColor.Green, false, true,  4000);
                 break;
             }
         }
@@ -102,8 +164,16 @@ namespace CruzadorBankGit.Viewer
         {
             IAccountSessionService accountSessionService;
 
+            int attemptsAmount = 0;
             while (true)
             {
+                if (attemptsAmount == 3)
+                {
+                    _consoleUI.SpecialMessage("Maximum attempts amount reached", clear: false, timer: true);
+                    return;
+                }
+                attemptsAmount++;
+
                 int accountId = 0;
 
                 _consoleUI.Head("ACCESS ACCOUNT");
@@ -113,17 +183,17 @@ namespace CruzadorBankGit.Viewer
                 }
                 catch (FormatException ex)
                 {
-                    _consoleUI.SpecialMessage("The account ID should be a valid integer number");
+                    _consoleUI.SpecialMessage("The account ID should be a valid integer number", clear: false, timer: true);
                     continue;
                 }
                 catch (OverflowException ex)
                 {
-                    _consoleUI.SpecialMessage($"The account ID should be a positive equals or bigger than 0, and lower then {int.MaxValue}");
+                    _consoleUI.SpecialMessage($"The account ID should be a positive equals or bigger than 0, and lower then {int.MaxValue}", clear: false, timer: true);
                     continue;
                 }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
 
@@ -134,9 +204,19 @@ namespace CruzadorBankGit.Viewer
                     accountSessionService = _accountService.Login(accountId, password);
                     break;
                 }
+                catch(PasswordException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (AccountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
                 catch (Exception ex)
                 {
-                    _consoleUI.SpecialMessage(ex.Message);
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
                     continue;
                 }
             }
