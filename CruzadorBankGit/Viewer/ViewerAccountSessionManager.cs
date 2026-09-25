@@ -121,6 +121,11 @@ namespace CruzadorBankGit.Viewer
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;
                 }
+                catch (AccountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
                 catch (ZeroBalanceException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
@@ -175,6 +180,11 @@ namespace CruzadorBankGit.Viewer
                     _accountSessionService.Deposit(amount);
                 }
                 catch (FinancialAmountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (AccountException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;

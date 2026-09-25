@@ -1,4 +1,5 @@
 ﻿using CruzadorBankGit.Entity;
+using CruzadorBankGit.Exceptions.Account;
 using System;
 using System.Collections.Generic;
 using System.Security.Principal;
@@ -33,10 +34,6 @@ namespace CruzadorBankGit.Repository
         }
         public void SetNewId(int newId)
         {
-            if(newId < 1) throw new ArgumentOutOfRangeException(nameof(newId), "newId should be a valid integer number bigger than 0");
-            int currentId = GetCurrentId();
-            if (newId <= currentId) throw new ArgumentOutOfRangeException(nameof(newId), "NewId should be bigger than the current Id ");
-
             using (FileStream stream = new FileStream(_idCouterPash, FileMode.Create))
             {
                 JsonSerializer.Serialize(stream, newId); 
@@ -44,12 +41,12 @@ namespace CruzadorBankGit.Repository
         }
         public void SaveNewAccount(Account account)
         {
-            if(account is null) throw new ArgumentNullException(nameof(account), "Account shouldnt be a null object");
+            if(account is null) throw new AccountException( "Account shouldnt be a null object");
 
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{account.AccountId.ToString()}");
             accountPath += ".json";
 
-            if (File.Exists(accountPath)) throw new Exception("Account informed already exists");
+            if (File.Exists(accountPath)) throw new AccountException("Informed Account already exists");
 
             using (FileStream stream = new FileStream(accountPath, FileMode.Create))
             {
@@ -58,12 +55,12 @@ namespace CruzadorBankGit.Repository
         }
         public void SaveAccount(Account account)
         {
-            if (account is null) throw new ArgumentNullException(nameof(account), "Account shouldnt be a null object");
+            if (account is null) throw new AccountException("Account shouldnt be a null object");
 
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{account.AccountId.ToString()}");
             accountPath += ".json";
 
-            if (!File.Exists(accountPath)) throw new Exception("Account informed doest not exists");
+            if (!File.Exists(accountPath)) throw new AccountException("Informed Account doest not exists");
 
             using (FileStream stream = new FileStream(accountPath, FileMode.Truncate))
             {
@@ -75,7 +72,7 @@ namespace CruzadorBankGit.Repository
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{accountId}");
             accountPath += ".json";
 
-            if (!File.Exists(accountPath)) throw new Exception("Account informed does not exists"); // Criar um exception para isso
+            if (!File.Exists(accountPath)) throw new AccountException("Informed Account does not exists");
 
             Account account;
             using (FileStream stream = new FileStream(accountPath, FileMode.Open))

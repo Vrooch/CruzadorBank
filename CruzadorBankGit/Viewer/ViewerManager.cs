@@ -125,6 +125,11 @@ namespace CruzadorBankGit.Viewer
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;
                 }
+                catch (AccountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
                 catch (FormatException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);

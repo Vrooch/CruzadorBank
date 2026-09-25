@@ -68,7 +68,7 @@ namespace CruzadorBankGit.Viewer
             Console.Write("Current balance: . . . . . . ");
             Console.ForegroundColor = ConsoleColor.Green;
             if (value <  0) Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(value);
+            Console.WriteLine($"{value:c}");
             Console.ResetColor();
         }
         public decimal AccountMoviment(string operationType)

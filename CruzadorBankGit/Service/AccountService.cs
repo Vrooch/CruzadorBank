@@ -44,6 +44,8 @@ namespace CruzadorBankGit.Service
             int currentId = _accountRepository.GetCurrentId();
             int newId = ++currentId;
 
+            if (newId < 1) throw new ArgumentOutOfRangeException(nameof(newId), "newId should be a valid integer number bigger than 0");
+
             Account account = new Account(newId, name, balance, HashedPassword, salt);
 
             _accountRepository.SetNewId(newId);
