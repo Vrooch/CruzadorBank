@@ -9,6 +9,7 @@ namespace CruzadorBankGit.Service
     {
         public void Withdrawal(decimal amount);
         public void Deposit(decimal amount);
+        public void InterAccountTransaction(decimal amount, int accountId);
         public AccountDTO GetAccountData();
         public void SaveAccount();
     }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CruzadorBankGit.Entity
 {
-    internal class Account
+    internal class Account : IAccountTransferable
     {
         private int _accountId;
         public int AccountId
@@ -55,6 +55,23 @@ namespace CruzadorBankGit.Entity
         public void Deposit(decimal amount)
         {
             if(amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
+            Balance += amount;
+        }
+        public void InterAccountTransaction(decimal amount, IAccountTransferable designatedAccount)
+        {
+            if (Balance == 0) throw new ZeroBalanceException("Account Without Balance");
+            if (amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
+            if (amount > Balance) throw new FinancialAmountException("Not enougth balance");
+
+            if (designatedAccount is null) throw new AccountException("The account shouldnt be null");
+
+            designatedAccount.ReceiveTransfer(amount);
+
+            Balance -= amount;
+        }
+        public void ReceiveTransfer(decimal amount)
+        {
+            if (amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
             Balance += amount;
         }
     }

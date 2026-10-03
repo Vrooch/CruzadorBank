@@ -62,6 +62,9 @@ namespace CruzadorBankGit.Viewer
                     case ViewerSessionOptions.Deposit:
                         Deposit();
                         break;
+                    case ViewerSessionOptions.InterAccountTransaction:
+                        InterAccountTransaction();
+                        break;
                     default:
                         _consoleUI.SpecialMessage("Select one of the avaliable aoption!!", clear: false, timer: true);
                         break;
@@ -74,6 +77,7 @@ namespace CruzadorBankGit.Viewer
             {
                 {ViewerSessionOptions.Withdrawal, "Make a withdawal"},
                 {ViewerSessionOptions.Deposit, "Make a deposit"},
+                {ViewerSessionOptions.InterAccountTransaction, "Inter Account Transaction"},
                 {ViewerSessionOptions.Leave, "Leave"}
             };
         }
@@ -180,6 +184,91 @@ namespace CruzadorBankGit.Viewer
                     _accountSessionService.Deposit(amount);
                 }
                 catch (FinancialAmountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (AccountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
+                    continue;
+                }
+
+                _consoleUI.SpecialMessage("Process finished with success", ConsoleColor.Green, false, true);
+                break;
+            }
+        }
+        internal void InterAccountTransaction()
+        {
+            int attemptsAmount = 0;
+            while (true)
+            {
+                if (attemptsAmount == 3)
+                {
+                    _consoleUI.SpecialMessage("Maximum attempts amount reached", clear: false, timer: true);
+                    return;
+                }
+                attemptsAmount++;
+
+                _consoleUI.MovementDeclaration("Inter Account Transaction");
+
+                int designatedAccountId;
+                try
+                {
+                    designatedAccountId = _consoleUI.GetInt("Designated Account Id: ");
+                }
+                catch (FormatException ex)
+                {
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true);
+                    continue;
+                }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
+                    continue;
+                }
+
+                decimal amount;
+                try
+                {
+                    amount = _consoleUI.InterAccountMovement();
+                }
+                catch (FormatException ex)
+                {
+                    _consoleUI.SpecialMessage("The amount should be a valid decimal number", clear: false, timer: true);
+                    continue;
+                }
+                catch (OverflowException ex)
+                {
+                    _consoleUI.SpecialMessage($"The amount should be a positive equals or bigger than 0, and lower then {decimal.MaxValue}", clear: false, timer: true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    _consoleUI.SpecialMessage($"Unexpected Error: \n{ex.Message}\n{ex.StackTrace}", clear: false, timer: true);
+                    continue;
+                }
+
+                try
+                {
+                    _accountSessionService.InterAccountTransaction(amount, designatedAccountId);
+                }
+                catch (FinancialAmountException ex)
+                {
+                    _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
+                    continue;
+                }
+                catch (ZeroBalanceException ex)
                 {
                     _consoleUI.SpecialMessage(ex.Message, clear: false, timer: true);
                     continue;
