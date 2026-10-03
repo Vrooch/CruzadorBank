@@ -67,8 +67,24 @@ namespace CruzadorBankGit.Repository
                 JsonSerializer.Serialize(stream, account);
             }
         }
+        public void SaveAccount(IAccountTransferable account)
+        {
+            if (account is null) throw new AccountException("Account shouldnt be a null object");
+
+            string accountPath = Path.Combine(_accountsDirectioryPath, $"{account.AccountId.ToString()}");
+            accountPath += ".json";
+
+            if (!File.Exists(accountPath)) throw new AccountException("Informed Account doest not exists");
+
+            using (FileStream stream = new FileStream(accountPath, FileMode.Truncate))
+            {
+                JsonSerializer.Serialize(stream, account);
+            }
+        }
         public Account GetAccount(int accountId)
         {
+            if (accountId >= 0) throw new AccountException("Account id should be bigger than 0");
+
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{accountId}");
             accountPath += ".json";
 
@@ -80,6 +96,10 @@ namespace CruzadorBankGit.Repository
                 account = JsonSerializer.Deserialize<Account>(stream);
             }
             return account;
+        }
+        public IAccountTransferable GetAccountTransferable(int accountId)
+        {
+            return GetAccount(accountId);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace CruzadorBankGit.Service
         public void Deposit(decimal amount)
         {
             _account.Deposit(amount);
-            _accountRepository.SaveAccount(this._account);
+            _accountRepository.SaveAccount(_account);
         }
         public AccountDTO GetAccountData()
         {
@@ -29,11 +29,20 @@ namespace CruzadorBankGit.Service
         public void Withdrawal(decimal amount)
         {
             _account.Withdrawal(amount);
-            _accountRepository.SaveAccount(this._account);
+            _accountRepository.SaveAccount(_account);
         }
         public void SaveAccount()
         {
-            _accountRepository.SaveAccount(this._account);
+            _accountRepository.SaveAccount(_account);
         }
+        public void InterAccountTransaction(decimal amount, int accountId)
+        {
+            IAccountTransferable destinadedAccount = _accountRepository.GetAccountTransferable(accountId);
+            _account.InterAccountTransaction(amount, destinadedAccount);
+            _accountRepository.SaveAccount(_account);
+
+            _accountRepository.SaveAccount(destinadedAccount);
+        }
+
     }
 }
