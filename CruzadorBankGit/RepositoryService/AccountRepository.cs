@@ -71,19 +71,21 @@ namespace CruzadorBankGit.Repository
         {
             if (account is null) throw new AccountException("Account shouldnt be a null object");
 
-            string accountPath = Path.Combine(_accountsDirectioryPath, $"{account.AccountId.ToString()}");
+            if (account is not Account concreteAccount) throw new AccountException("Account shouldnt be Account");
+
+            string accountPath = Path.Combine(_accountsDirectioryPath, $"{concreteAccount.AccountId.ToString()}");
             accountPath += ".json";
 
             if (!File.Exists(accountPath)) throw new AccountException("Informed Account doest not exists");
 
             using (FileStream stream = new FileStream(accountPath, FileMode.Truncate))
             {
-                JsonSerializer.Serialize(stream, account);
+                JsonSerializer.Serialize(stream, concreteAccount);
             }
         }
         public Account GetAccount(int accountId)
         {
-            if (accountId >= 0) throw new AccountException("Account id should be bigger than 0");
+            if (accountId <= 0) throw new AccountException("Account id should be bigger than 0");
 
             string accountPath = Path.Combine(_accountsDirectioryPath, $"{accountId}");
             accountPath += ".json";

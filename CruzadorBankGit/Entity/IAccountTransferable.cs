@@ -6,7 +6,6 @@ namespace CruzadorBankGit.Entity
 {
     internal interface IAccountTransferable
     {
-        public int AccountId { get; }
         public void ReceiveTransfer(decimal amount);
     }
 }

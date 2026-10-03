@@ -35,13 +35,14 @@ namespace CruzadorBankGit.Service
         {
             _accountRepository.SaveAccount(_account);
         }
-        public void InterAccountTransaction(decimal amount, int accountId)
+        public void InterAccountTransaction(decimal amount, int designatedAccountId)
         {
-            IAccountTransferable destinadedAccount = _accountRepository.GetAccountTransferable(accountId);
-            _account.InterAccountTransaction(amount, destinadedAccount);
+            IAccountTransferable designatedAccount = _accountRepository.GetAccountTransferable(designatedAccountId);
+            _account.InterAccountTransaction(amount, designatedAccount);
+
             _accountRepository.SaveAccount(_account);
 
-            _accountRepository.SaveAccount(destinadedAccount);
+            _accountRepository.SaveAccount(designatedAccount);
         }
 
     }

@@ -57,15 +57,15 @@ namespace CruzadorBankGit.Entity
             if(amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
             Balance += amount;
         }
-        public void InterAccountTransaction(decimal amount, IAccountTransferable account)
+        public void InterAccountTransaction(decimal amount, IAccountTransferable designatedAccount)
         {
             if (Balance == 0) throw new ZeroBalanceException("Account Without Balance");
             if (amount <= 0) throw new FinancialAmountException("The amount should be bigger than 0");
             if (amount > Balance) throw new FinancialAmountException("Not enougth balance");
 
-            if (account is null) throw new AccountException("The account shouldnt be null");
+            if (designatedAccount is null) throw new AccountException("The account shouldnt be null");
 
-            account.ReceiveTransfer(amount);
+            designatedAccount.ReceiveTransfer(amount);
 
             Balance -= amount;
         }

@@ -9,6 +9,7 @@ namespace CruzadorBankGit.Viewer
         Leave = 0,
         Withdrawal,
         Deposit,
+        InterAccountTransaction
         
     }
 }
